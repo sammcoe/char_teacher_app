@@ -7,6 +7,6 @@
     tools:context="com.codecoe.charteacher.MainActivity">
     <view android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        class="com.codecoe.charteacher.HandwritingRecognize" android:id="@+id/view"/>
+        class="com.codecoe.charteacher.Draw" android:id="@+id/view"/>
 
 </RelativeLayout>
