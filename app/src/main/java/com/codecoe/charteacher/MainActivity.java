@@ -36,10 +36,10 @@ public class MainActivity extends Activity {
         Bitmap bmp = drawView.get();
         FileOutputStream out = null;
         drawView.picFile = new File(drawView.myContext.getFilesDir(), "myLetter.png");
-        drawView.submit();
+        //drawView.submit();
         try {
             out = new FileOutputStream(drawView.picFile.getAbsolutePath());
-            System.out.println(drawView.picFile.getAbsolutePath());
+            System.out.println("path" +drawView.picFile.getAbsolutePath());
             //out = new FileOutputStream("/sdcard/test.png");
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            drawView.submit();
         }
     }
 
