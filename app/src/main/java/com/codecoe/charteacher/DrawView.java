@@ -8,11 +8,19 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.graphics.Bitmap;
+import java.io.FileOutputStream;
+import java.io.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.util.AttributeSet;
 
 public class DrawView extends View implements OnTouchListener {
+    Canvas MyCanvas;
+    File picFile;
+    Context myContext;
     private static final String TAG = "DrawView";
     private static final String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static boolean submit = false;
@@ -23,6 +31,24 @@ public class DrawView extends View implements OnTouchListener {
 
     public DrawView(Context context) {
         super(context);
+        this.setDrawingCacheEnabled(true);
+
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+
+        this.setOnTouchListener(this);
+
+        paint.setColor(Color.BLACK);
+        paint.setAntiAlias(true);
+
+
+    }
+
+    public DrawView(Context context, AttributeSet attrSet) {
+        super(context);
+        myContext = context;
+        this.setDrawingCacheEnabled(true);
+
         setFocusable(true);
         setFocusableInTouchMode(true);
 
@@ -32,6 +58,34 @@ public class DrawView extends View implements OnTouchListener {
         paint.setColor(Color.BLACK);
         paint.setAntiAlias(true);
         paint.setTextSize(80);
+        final Button save = (Button) findViewById(R.id.button1);
+        final View drawView = (View) findViewById(R.id.drawView);
+ /*       save.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //save canvas
+                Bitmap bmp = get();
+                FileOutputStream out = null;
+                picFile = new File(myContext.getFilesDir(), "myLetter");
+                try {
+                    out = new FileOutputStream(picFile.getAbsolutePath());
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (out != null) {
+                            out.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });*/
+
+
     }
 
     @Override
@@ -75,6 +129,12 @@ public class DrawView extends View implements OnTouchListener {
         char character = alpha.charAt(index);
         return character;
     }
+
+    public Bitmap get() {
+        return this.getDrawingCache();
+
+    }
+
 }
 
 class Point {

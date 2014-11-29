@@ -1,18 +1,58 @@
 package com.codecoe.charteacher;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import android.widget.Button;
+import android.view.View.OnClickListener;
 
 
 public class MainActivity extends Activity {
-
+    //DrawView drawView;
+    Button save;
+    DrawView drawView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    //    drawView = new DrawView(this);
         setContentView(R.layout.activity_main);
+
+        save = (Button) findViewById(R.id.button1);
+        drawView = (DrawView) findViewById(R.id.drawView);
+
+        OnClickListener clickSave = new OnClickListener(){
+                public void onClick(View v) {
+                    //save canvas
+                    Bitmap bmp = drawView.get();
+                    FileOutputStream out = null;
+                    drawView.picFile = new File(drawView.myContext.getFilesDir(), "myLetter");
+                    try {
+                        out = new FileOutputStream(drawView.picFile.getAbsolutePath());
+                        bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                        // PNG is a lossless format, the compression factor (100) is ignored
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (out != null) {
+                                out.close();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+        };
     }
+
 
 
     @Override
