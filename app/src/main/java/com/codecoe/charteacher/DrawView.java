@@ -14,6 +14,9 @@ import java.util.List;
 
 public class DrawView extends View implements OnTouchListener {
     private static final String TAG = "DrawView";
+    private static final String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static boolean submit = false;
+    private static int index = -1;
 
     List<Point> points = new ArrayList<Point>();
     Paint paint = new Paint();
@@ -25,14 +28,27 @@ public class DrawView extends View implements OnTouchListener {
 
         this.setOnTouchListener(this);
 
+
         paint.setColor(Color.BLACK);
         paint.setAntiAlias(true);
+        paint.setTextSize(80);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
+        String str;
+        if(index == -1) {
+            str = "Draw the letter: " + getNextChar();
+        }else{
+            str = "Draw the letter: " + getCurrentChar();
+        }
+        if(submit) {
+            getNextChar();
+            submit = false;
+        }
+        canvas.drawText(str,180, 70, paint);
         for (Point point : points) {
-            canvas.drawCircle(point.x, point.y, 5, paint);
+            canvas.drawCircle(point.x, point.y, 50, paint);
             // Log.d(TAG, "Painting: "+point);
         }
     }
@@ -48,6 +64,17 @@ public class DrawView extends View implements OnTouchListener {
         Log.d(TAG, "point: " + point);
         return true;
     }
+
+    private char getNextChar(){
+        index++;
+        char character = alpha.charAt(index);
+        return character;
+    }
+
+    private char getCurrentChar(){
+        char character = alpha.charAt(index);
+        return character;
+    }
 }
 
 class Point {
@@ -58,3 +85,4 @@ class Point {
         return x + ", " + y;
     }
 }
+
