@@ -18,21 +18,25 @@ public class MainActivity extends Activity {
     //DrawView drawView;
     Button save;
     DrawView drawView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     //    drawView = new DrawView(this);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
         save = (Button) findViewById(R.id.button1);
         drawView = (DrawView) findViewById(R.id.drawView);
+        System.out.println(findViewById(R.id.drawView));
 
-        OnClickListener clickSave = new OnClickListener(){
+        save.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     //save canvas
                     Bitmap bmp = drawView.get();
                     FileOutputStream out = null;
                     drawView.picFile = new File(drawView.myContext.getFilesDir(), "myLetter");
+                    System.out.println(drawView.picFile.getAbsolutePath());
+                    drawView.submit();
                     try {
                         out = new FileOutputStream(drawView.picFile.getAbsolutePath());
                         bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
@@ -50,7 +54,7 @@ public class MainActivity extends Activity {
                     }
                 }
 
-        };
+        });
     }
 
 

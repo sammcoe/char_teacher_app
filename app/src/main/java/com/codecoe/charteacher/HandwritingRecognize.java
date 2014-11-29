@@ -20,16 +20,15 @@ public class HandwritingRecognize {
         Draw myDraw = new Draw();
     }
 
-    public String recognize(String fileLoc){
-        File file = new File(fileLoc);
+    public String recognize(File file){
         HashMap<String, Double> output = new HashMap<String, Double>();
-        try {
+        /*try {
             // image recognition is done here (specify some existing image file)
             output = imageRecognition.recognizeImage(file);
             System.out.println(output.toString());
         } catch(IOException ioe) {
             ioe.printStackTrace();
-        }
+        }*/
         return(getAnswer(output));
     }
 
