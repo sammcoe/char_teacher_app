@@ -13,7 +13,7 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -23,4 +23,7 @@ dependencies {
     //compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/neuroph-core-2.9.jar')
     compile files('libs/neuroph-imgrec-2.9.jar')
+    compile files('libs/encog-engine-2.5.0.jar')
+    compile files('libs/JOCL-0.1.3a-beta.jar')
+    compile files('libs/neuroph.jar')
 }

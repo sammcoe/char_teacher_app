@@ -85,7 +85,7 @@ public class DrawView extends View implements OnTouchListener {
 
     public void submit(){
         submit = true;
-        HandwritingRecognize handRec = new HandwritingRecognize();
+        HandwritingRecognize handRec = new HandwritingRecognize(this.getContext());
         String result = handRec.recognize(picFile);
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         if(result.equals(getCurrentChar())){

@@ -1,30 +1,63 @@
 package com.codecoe.charteacher;
+import org.neuroph.contrib.imgrec.ImageRecognitionPlugin;
+import org.neuroph.contrib.imgrec.image.Image;
+import org.neuroph.contrib.imgrec.image.ImageFactory;
 import org.neuroph.core.NeuralNetwork;
-import org.neuroph.imgrec.ImageRecognitionPlugin;
+import org.neuroph.core.NeuralNetwork;
+import org.neuroph.contrib.imgrec.*;
 import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import android.content.Context;
 
 public class HandwritingRecognize {
+    private Bitmap bitmap;
+    private Image image;
+
+    private static NeuralNetwork nnet;
     private static ImageRecognitionPlugin imageRecognition;
 
-    public static void main(String[] args) {
-        // load trained neural network saved with Neuroph Studio (specify some existing neural network file here)
-        NeuralNetwork nnet = NeuralNetwork.load("handwriting.nnet"); // load trained neural network saved with Neuroph Studio
-        // get the image recognition plugin from neural network
-        imageRecognition = (ImageRecognitionPlugin)nnet.getPlugin(ImageRecognitionPlugin.class); // get the image recognition plugin from neural network
+    private static Context context;
+
+    public HandwritingRecognize(Context cont){
+        context = cont;
     }
 
-    public String recognize(File file){
-        HashMap<String, Double> output = new HashMap<String, Double>();
-        try {
-            // image recognition is done here (specify some existing image file)
-            output = imageRecognition.recognizeImage(file);
-            System.out.println(output.toString());
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
+    public static void main(String[] args) {
+        loadData();
+    }
+
+    private static void loadData() {
+        // load neural network in separate thread with stack size = 32000
+        new Thread(null, loadDataRunnable, "dataLoader", 32000).start();
+    }
+
+    private static Runnable loadDataRunnable = new Runnable() {
+        public void run() {
+            // open neural network
+            InputStream is = context.getResources().openRawResource(R.raw.handwriting);
+            // load neural network
+            nnet = NeuralNetwork.load(is);
+            imageRecognition = (ImageRecognitionPlugin) nnet.getPlugin(ImageRecognitionPlugin.class);
         }
+    };
+
+    public String recognize(File file){
+        String filePath = file.getAbsolutePath();
+        // get image
+        image = ImageFactory.getImage(filePath);
+        System.out.println(image.getHeight());
+        HashMap<String, Double> output = imageRecognition.recognizeImage(image);
+        System.out.println(output.toString());
+
         return(getAnswer(output));
     }
 
