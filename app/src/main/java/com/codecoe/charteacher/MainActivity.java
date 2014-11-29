@@ -36,7 +36,6 @@ public class MainActivity extends Activity {
         Bitmap bmp = drawView.get();
         FileOutputStream out = null;
         drawView.picFile = new File(drawView.myContext.getFilesDir(), "myLetter.png");
-        drawView.submit();
         try {
             out = new FileOutputStream(drawView.picFile.getAbsolutePath());
             System.out.println(drawView.picFile.getAbsolutePath());
@@ -54,6 +53,7 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
             }
         }
+        drawView.submit();
     }
 
     @Override

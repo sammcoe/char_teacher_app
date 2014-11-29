@@ -27,6 +27,7 @@ public class DrawView extends View implements OnTouchListener {
     private static final String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static boolean submit = false;
     private static int index = -1;
+    HandwritingRecognize handRec;
 
     List<Point> points = new ArrayList<Point>();
     Paint paint = new Paint();
@@ -35,6 +36,7 @@ public class DrawView extends View implements OnTouchListener {
         super(context, attrSet);
         myContext = context;
         setDrawingCacheEnabled(true);
+
 
         // Without it the view will have a dimension of 0,0 and the bitmap will be null
         //measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
@@ -85,9 +87,9 @@ public class DrawView extends View implements OnTouchListener {
 
     public void submit(){
         submit = true;
-        HandwritingRecognize handRec = new HandwritingRecognize(this.getContext());
+        HandwritingRecognize handRec = new HandwritingRecognize(myContext);
         String result = handRec.recognize(picFile);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
         if(result.equals(getCurrentChar())){
             builder.setMessage("Correct!")
                     .setTitle("Correct!");
