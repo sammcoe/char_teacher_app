@@ -6,9 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-/**
- * Created by sam on 11/23/14.
- */
 public class HandwritingRecognize {
     private static ImageRecognitionPlugin imageRecognition;
 
@@ -17,18 +14,17 @@ public class HandwritingRecognize {
         NeuralNetwork nnet = NeuralNetwork.load("handwriting.nnet"); // load trained neural network saved with Neuroph Studio
         // get the image recognition plugin from neural network
         imageRecognition = (ImageRecognitionPlugin)nnet.getPlugin(ImageRecognitionPlugin.class); // get the image recognition plugin from neural network
-        Draw myDraw = new Draw();
     }
 
     public String recognize(File file){
         HashMap<String, Double> output = new HashMap<String, Double>();
-        /*try {
+        try {
             // image recognition is done here (specify some existing image file)
             output = imageRecognition.recognizeImage(file);
             System.out.println(output.toString());
         } catch(IOException ioe) {
             ioe.printStackTrace();
-        }*/
+        }
         return(getAnswer(output));
     }
 

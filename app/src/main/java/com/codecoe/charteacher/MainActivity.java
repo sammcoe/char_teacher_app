@@ -26,45 +26,35 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    //    drawView = new DrawView(this);
         setContentView(R.layout.activity_main);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linearLayout);
-        ViewTreeObserver vto = layout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                save = (Button) findViewById(R.id.button1);
-                drawView = (DrawView) findViewById(R.id.drawView);        OnClickListener clickSave = new OnClickListener(){
-                    public void onClick(View v) {
-                        //save canvas
-                        Bitmap bmp = drawView.get();
-                        FileOutputStream out = null;
-                        drawView.picFile = new File(drawView.myContext.getFilesDir(), "myLetter.png");
-                        drawView.submit();
-                        try {
-                            out = new FileOutputStream(drawView.picFile.getAbsolutePath());
-                            //out = new FileOutputStream("/sdcard/test.png");
-                            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                            // PNG is a lossless format, the compression factor (100) is ignored
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
-                            try {
-                                if (out != null) {
-                                    out.close();
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                };
-                save.setOnClickListener(clickSave);
-            }
-        });
     }
 
-
+    public void onClick(View v) {
+        save = (Button) findViewById(R.id.button1);
+        drawView = (DrawView) findViewById(R.id.drawView);
+        //save canvas
+        Bitmap bmp = drawView.get();
+        FileOutputStream out = null;
+        drawView.picFile = new File(drawView.myContext.getFilesDir(), "myLetter.png");
+        drawView.submit();
+        try {
+            out = new FileOutputStream(drawView.picFile.getAbsolutePath());
+            System.out.println(drawView.picFile.getAbsolutePath());
+            //out = new FileOutputStream("/sdcard/test.png");
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

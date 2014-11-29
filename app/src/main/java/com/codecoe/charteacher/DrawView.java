@@ -31,64 +31,25 @@ public class DrawView extends View implements OnTouchListener {
     List<Point> points = new ArrayList<Point>();
     Paint paint = new Paint();
 
-    public DrawView(Context context) {
-        super(context);
-        this.setDrawingCacheEnabled(true);
-
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-
-        this.setOnTouchListener(this);
-
-        paint.setColor(Color.BLACK);
-        paint.setAntiAlias(true);
-
-    }
-
     public DrawView(Context context, AttributeSet attrSet) {
-        super(context);
+        super(context, attrSet);
         myContext = context;
-        this.setDrawingCacheEnabled(true);
+        setDrawingCacheEnabled(true);
+
+        // Without it the view will have a dimension of 0,0 and the bitmap will be null
+        //measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+        //        MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        //layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
+        System.out.println("w" + getMeasuredWidth() + "H" + getMeasuredHeight());
 
         setFocusable(true);
         setFocusableInTouchMode(true);
 
         this.setOnTouchListener(this);
-
 
         paint.setColor(Color.BLACK);
         paint.setAntiAlias(true);
         paint.setTextSize(80);
-       /* final Button save = (Button) findViewById(R.id.button1);
-        final View drawView = (View) findViewById(R.id.drawView);
-        save.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //save canvas
-                Bitmap bmp = get();
-                FileOutputStream out = null;
-                picFile = new File(myContext.getFilesDir(), "myLetter");
-                System.out.println(picFile.getAbsolutePath());
-                try {
-                    out = new FileOutputStream(picFile.getAbsolutePath());
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                    //submit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (out != null) {
-                            out.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });*/
-
-
     }
 
     @Override
@@ -161,14 +122,9 @@ public class DrawView extends View implements OnTouchListener {
     }
 
     public Bitmap get(){
-        // Without it the view will have a dimension of 0,0 and the bitmap will be null
-        this.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        this.layout(0, 0, this.getMeasuredWidth(), this.getMeasuredHeight());
-        System.out.println(this.getMeasuredWidth() + this.getMeasuredHeight());
-        this.buildDrawingCache(true);
-        Bitmap b = Bitmap.createBitmap(this.getDrawingCache());
-        this.setDrawingCacheEnabled(false); // clear drawing cache
+        buildDrawingCache(true);
+        Bitmap b = Bitmap.createBitmap(getDrawingCache());
+        setDrawingCacheEnabled(false); // clear drawing cache
         return b;
     }
 }

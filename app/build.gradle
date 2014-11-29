@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/neuroph-adapters-2.9.jar')
+    //compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/neuroph-core-2.9.jar')
+    compile files('libs/neuroph-imgrec-2.9.jar')
 }
