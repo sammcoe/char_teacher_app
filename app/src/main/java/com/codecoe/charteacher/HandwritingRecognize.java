@@ -1,27 +1,59 @@
 package com.codecoe.charteacher;
+
+import org.neuroph.contrib.imgrec.ImageRecognitionPlugin;
+import org.neuroph.contrib.imgrec.image.ImageAndroid;
 import org.neuroph.core.NeuralNetwork;
-import org.neuroph.imgrec.ImageRecognitionPlugin;
+import android.graphics.Bitmap;
+
 import java.util.HashMap;
 import java.io.File;
-import java.io.IOException;
+import java.util.Map;
 
-/**
- * Created by sam on 11/23/14.
- */
+import java.io.InputStream;
+
+import android.content.Context;
+
 public class HandwritingRecognize {
+    private Bitmap bitmap;
+    private ImageAndroid image;
 
-    public static void main(String[] args) {
-        // load trained neural network saved with Neuroph Studio (specify some existing neural network file here)
-        NeuralNetwork nnet = NeuralNetwork.load("handwriting.nnet"); // load trained neural network saved with Neuroph Studio
-        // get the image recognition plugin from neural network
-        ImageRecognitionPlugin imageRecognition = (ImageRecognitionPlugin)nnet.getPlugin(ImageRecognitionPlugin.class); // get the image recognition plugin from neural network
+    private static NeuralNetwork nnet;
+    private  ImageRecognitionPlugin imageRecognition;
 
-        try {
-            // image recognition is done here (specify some existing image file)
-            HashMap<String, Double> output = imageRecognition.recognizeImage(new File("someImage.jpg"));
-            System.out.println(output.toString());
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
+    private static Context context;
+
+    public HandwritingRecognize(Context cont){
+        context = cont;
+        //loadData();
+    }
+
+    private void loadData() {
+    }
+
+    public String recognize(File file){
+        // open neural network
+        InputStream is = context.getResources().openRawResource(R.raw.digitrec);
+        // load neural network
+        nnet = NeuralNetwork.load(is);
+        imageRecognition = (ImageRecognitionPlugin) nnet.getPlugin(ImageRecognitionPlugin.class);
+        String filePath = file.getAbsolutePath();
+        // get image
+        image = new ImageAndroid(file);
+        HashMap<String, Double> output = imageRecognition.recognizeImage(image);
+
+        return(getAnswer(output));
+    }
+
+    private String getAnswer(HashMap<String, Double> output) {
+        double highest = 0;
+        String answer = "";
+        for (Map.Entry<String, Double> entry : output.entrySet()) {
+            if (entry.getValue() > highest) {
+                highest = entry.getValue();
+                answer = entry.getKey();
+            }
         }
+        System.out.println(answer);
+        return answer;
     }
 }
