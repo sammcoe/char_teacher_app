@@ -112,6 +112,7 @@ public class DrawView extends View implements OnTouchListener {
         AlertDialog dialog = builder.create();
     }
 
+
     private char getNextChar(){
         index++;
         char character = alpha.charAt(index);

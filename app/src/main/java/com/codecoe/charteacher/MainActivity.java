@@ -16,12 +16,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.LinearLayout;
+import android.content.Intent;
 
 
 public class MainActivity extends Activity {
     //DrawView drawView;
     Button save;
     DrawView drawView;
+    boolean switcher = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +54,34 @@ public class MainActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            drawView.submit();
+            success(v);
+            //drawView.submit();
         }
-        drawView.submit();
+        //drawView.submit();
     }
 
+    public void success(View view){
+        Bundle bundle = getIntent().getExtras();
+        // 1 = success 0 = failure
+        if(bundle != null){
+            int value = bundle.getInt("last");
+        if(value == 0) {
+            Intent intent = new Intent(this, success.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(this, faliure.class);
+            startActivity(intent);
+        }}
+        else{
+            Intent intent = new Intent(this, success.class);
+            startActivity(intent);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
