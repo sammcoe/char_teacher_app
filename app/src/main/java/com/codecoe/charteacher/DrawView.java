@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,7 +25,7 @@ public class DrawView extends View implements OnTouchListener {
     File picFile;
     Context myContext;
     private static final String TAG = "DrawView";
-    private static final String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String alpha = "0123456789";
     private static boolean submit = false;
     private static int index = -1;
     HandwritingRecognize handRec;
@@ -58,12 +59,13 @@ public class DrawView extends View implements OnTouchListener {
     public void onDraw(Canvas canvas) {
         String str;
         if(index == -1) {
-            str = "Draw the letter: " + getNextChar();
+            str = "Draw the number: " + getNextChar();
         }else{
-            str = "Draw the letter: " + getCurrentChar();
+            str = "Draw the number: " + getCurrentChar();
         }
         if(submit) {
-            getNextChar();
+            System.out.println("HI");
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
             submit = false;
         }
         canvas.drawText(str,180, 70, paint);
@@ -86,30 +88,33 @@ public class DrawView extends View implements OnTouchListener {
     }
 
     public void submit(){
-        submit = true;
         HandwritingRecognize handRec = new HandwritingRecognize(myContext);
         String result = handRec.recognize(picFile);
         AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
+        submit = true;
         if(result.equals(getCurrentChar())){
+            System.out.println("Correct");
             builder.setMessage("Correct!")
                     .setTitle("Correct!");
             builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //OK
+                    getNextChar();
                 }
             });
         }else{
+            System.out.println("Incorrect");
             builder.setMessage("Incorrect")
                     .setTitle("Try again.");
             builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //OK
+                    //retry
                 }
             });
         }
         AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private char getNextChar(){

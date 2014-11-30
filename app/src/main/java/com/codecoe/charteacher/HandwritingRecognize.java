@@ -1,8 +1,7 @@
 package com.codecoe.charteacher;
 
 import org.neuroph.contrib.imgrec.ImageRecognitionPlugin;
-import org.neuroph.contrib.imgrec.image.Image;
-import org.neuroph.contrib.imgrec.image.ImageFactory;
+import org.neuroph.contrib.imgrec.image.ImageAndroid;
 import org.neuroph.core.NeuralNetwork;
 import android.graphics.Bitmap;
 
@@ -16,7 +15,7 @@ import android.content.Context;
 
 public class HandwritingRecognize {
     private Bitmap bitmap;
-    private Image image;
+    private ImageAndroid image;
 
     private static NeuralNetwork nnet;
     private  ImageRecognitionPlugin imageRecognition;
@@ -25,24 +24,22 @@ public class HandwritingRecognize {
 
     public HandwritingRecognize(Context cont){
         context = cont;
-        loadData();
+        //loadData();
     }
 
     private void loadData() {
+    }
+
+    public String recognize(File file){
         // open neural network
         InputStream is = context.getResources().openRawResource(R.raw.digitrec);
         // load neural network
         nnet = NeuralNetwork.load(is);
         imageRecognition = (ImageRecognitionPlugin) nnet.getPlugin(ImageRecognitionPlugin.class);
-    }
-
-    public String recognize(File file){
-        System.out.println(file.getAbsolutePath());
         String filePath = file.getAbsolutePath();
         // get image
-        image = ImageFactory.getImage(filePath);
+        image = new ImageAndroid(file);
         HashMap<String, Double> output = imageRecognition.recognizeImage(image);
-        System.out.println(output.toString());
 
         return(getAnswer(output));
     }
@@ -56,7 +53,7 @@ public class HandwritingRecognize {
                 answer = entry.getKey();
             }
         }
-
+        System.out.println(answer);
         return answer;
     }
 }
