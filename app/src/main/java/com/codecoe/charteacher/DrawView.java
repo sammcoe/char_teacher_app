@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,13 +40,6 @@ public class DrawView extends View implements OnTouchListener {
         myContext = context;
         setDrawingCacheEnabled(true);
 
-
-        // Without it the view will have a dimension of 0,0 and the bitmap will be null
-        //measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-        //        MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        //layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
-        System.out.println("w" + getMeasuredWidth() + "H" + getMeasuredHeight());
-
         setFocusable(true);
         setFocusableInTouchMode(true);
 
@@ -64,8 +59,7 @@ public class DrawView extends View implements OnTouchListener {
             str = "Draw the number: " + getCurrentChar();
         }
         if(submit) {
-            System.out.println("HI");
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            points.clear();
             submit = false;
         }
         canvas.drawText(str,180, 70, paint);
@@ -99,6 +93,7 @@ public class DrawView extends View implements OnTouchListener {
             builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    invalidate();
                     getNextChar();
                 }
             });
@@ -109,6 +104,7 @@ public class DrawView extends View implements OnTouchListener {
             builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    invalidate();
                     //retry
                 }
             });
