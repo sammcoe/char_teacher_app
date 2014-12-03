@@ -27,7 +27,7 @@ public class DrawView extends View implements OnTouchListener {
     File picFile;
     Context myContext;
     private static final String TAG = "DrawView";
-    private static final String alpha = "0123456789";
+    private static final String alpha = "1234567890";
     private static boolean submit = false;
     private static int index = -1;
     HandwritingRecognize handRec;
@@ -38,7 +38,6 @@ public class DrawView extends View implements OnTouchListener {
     public DrawView(Context context, AttributeSet attrSet) {
         super(context, attrSet);
         myContext = context;
-        setDrawingCacheEnabled(true);
 
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -86,7 +85,8 @@ public class DrawView extends View implements OnTouchListener {
         String result = handRec.recognize(picFile);
         AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
         submit = true;
-        if(result.equals(getCurrentChar())){
+        System.out.println("Current Char: " + getCurrentChar() + "Result: " + result.charAt(0));
+        if(result.charAt(0) == getCurrentChar()){
             System.out.println("Correct");
             builder.setMessage("Correct!")
                     .setTitle("Correct!");
@@ -125,6 +125,7 @@ public class DrawView extends View implements OnTouchListener {
     }
 
     public Bitmap get(){
+        setDrawingCacheEnabled(true);
         buildDrawingCache(true);
         Bitmap b = Bitmap.createBitmap(getDrawingCache());
         setDrawingCacheEnabled(false); // clear drawing cache
